@@ -4,18 +4,19 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { authActions } from "../store/auth";
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const Login = () => {
   const [Data, setData] = useState({ username: "", password: "" });
-  const history  = useNavigate(); 
-  const isLoggedIn = useSelector((state)=>state.auth.isLoggedIn);
+  const history = useNavigate(); 
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
   if (isLoggedIn === true) {
     history("/");
   }
 
   const dispatch = useDispatch();
 
-
- 
   const change = (e) => {
     const { name, value } = e.target;
     setData({ ...Data, [name]: value });
@@ -25,19 +26,19 @@ const Login = () => {
     try {
       if (Data.username === "" || Data.password === "") {
         alert("All fields are required");
-      } 
-      else {
+      } else {
         const response = await axios.post(
-          "http://localhost:1000/api/v1/log-in",
-           Data); 
+          `${API_BASE_URL}/api/v1/log-in`,
+          Data
+        );
         setData({ username: "", password: "" });
-        localStorage.setItem("id",response.data.id);
-        localStorage.setItem("token",response.data.token);
+        localStorage.setItem("id", response.data.id);
+        localStorage.setItem("token", response.data.token);
         dispatch(authActions.login());
         history("/");
       }
     } catch (error) {
-      alert(error.response.data.message);
+      alert(error.response?.data?.message || "Login failed");
     }
   };
 

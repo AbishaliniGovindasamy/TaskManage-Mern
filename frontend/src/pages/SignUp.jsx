@@ -1,18 +1,20 @@
-import React, { useState } from 'react'; // Import useState
-import { Link,  useNavigate } from 'react-router-dom';
-import { useSelector} from "react-redux";
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector } from "react-redux";
 import axios from "axios";
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-const Signup = () => { 
-  const history  = useNavigate(); 
-  const isLoggedIn = useSelector((state)=>state.auth.isLoggedIn);
+const Signup = () => {
+  const history = useNavigate(); 
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
   if (isLoggedIn === true) {
     history("/");
   }
-  const [Data, setData] = useState({ username: "",email: "", password: "" });
 
-  
+  const [Data, setData] = useState({ username: "", email: "", password: "" });
+
   const change = (e) => {
     const { name, value } = e.target;
     setData({ ...Data, [name]: value });
@@ -23,20 +25,17 @@ const Signup = () => {
       if (Data.username === "" || Data.email === "" || Data.password === "") {
         alert("All fields are required");
       } else {
-      const response = await axios.post(
-        "http://localhost:1000/api/v1/sign-in",
-         Data); 
-         setData({ username: "", email: "", password: "" });
-         alert(response.data.message); 
-         
-         history("/login");
-         
-          }
-      
+        const response = await axios.post(
+          `${API_BASE_URL}/api/v1/sign-in`,
+          Data
+        );
+        setData({ username: "", email: "", password: "" });
+        alert(response.data.message);
+        history("/login");
+      }
     } catch (error) {
-      alert(error.response.data.message);
+      alert(error.response?.data?.message || "Signup failed");
     }
-  
   };
 
   return (
@@ -44,7 +43,7 @@ const Signup = () => {
       <div className='p-4 w-2/6 rounded bg-gray-800'>
         <div className='text-2xl font-semibold'>Signup</div>
         <input
-          type='text' // Fixed input type for username
+          type='text'
           placeholder='username'
           className='bg-gray-700 px-2 my-3 w-full rounded'
           name='username'
@@ -56,7 +55,7 @@ const Signup = () => {
           type='email'
           placeholder='email'
           className='bg-gray-700 px-2 my-3 w-full rounded'
-          name='email' // Corrected the name attribute
+          name='email'
           value={Data.email}
           required
           onChange={change}

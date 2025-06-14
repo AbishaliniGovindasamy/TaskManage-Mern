@@ -26,7 +26,8 @@ const Signup = () => {
         alert("All fields are required");
       } else {
         const response = await axios.post(
-          `${API_BASE_URL}/api/v1/sign-in`,
+         `${process.env.REACT_APP_API_BASE_URL}/api/v1/sign-in`
+,
           Data
         );
         setData({ username: "", email: "", password: "" });

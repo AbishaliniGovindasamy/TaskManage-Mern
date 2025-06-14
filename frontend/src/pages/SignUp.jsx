@@ -3,8 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import axios from "axios";
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
 const Signup = () => {
   const history = useNavigate(); 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -26,8 +24,7 @@ const Signup = () => {
         alert("All fields are required");
       } else {
         const response = await axios.post(
-         `${process.env.REACT_APP_API_BASE_URL}/api/v1/sign-in`
-,
+          `${process.env.REACT_APP_API_BASE_URL}/api/v1/sign-in`,
           Data
         );
         setData({ username: "", email: "", password: "" });

@@ -4,8 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { authActions } from "../store/auth";
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
 const Login = () => {
   const [Data, setData] = useState({ username: "", password: "" });
   const history = useNavigate(); 
@@ -27,10 +25,10 @@ const Login = () => {
       if (Data.username === "" || Data.password === "") {
         alert("All fields are required");
       } else {
-      const response = await axios.post(
-  `${process.env.REACT_APP_API_BASE_URL}/api/v1/log-in`,
-  Data
-);
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_BASE_URL}/api/v1/log-in`,
+          Data
+        );
 
         setData({ username: "", password: "" });
         localStorage.setItem("id", response.data.id);
@@ -39,7 +37,7 @@ const Login = () => {
         history("/");
       }
     } catch (error) {
-      alert(error.response?.data?.message || "Login failed");
+      alert(error?.response?.data?.message || "Login failed");
     }
   };
 
